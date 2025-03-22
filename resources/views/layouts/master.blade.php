@@ -172,6 +172,29 @@
                                 class="bullet-point"><span></span></i> {{ __('Integrations') }}</a>
                 </div>
             @endif
+
+            @if(Entrust::hasRole('administrator') || Entrust::hasRole('owner'))
+            <a href="#data" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu">
+                <i class="fa fa-upload sidebar-icon"></i>
+                <span id="menu-txt">{{ __('Data') }}</span>
+                <i class="icon ion-md-arrow-dropup arrow-side sidebar-arrow"></i>
+            </a>
+
+            <div class="collapse" id="data">
+                <a href="{{ route('database.reset')}}"
+                class="list-group-item childlist">
+                <i class="bullet-point"><span></span></i> {{ __('Reset data') }}
+                </a>
+                <a href="{{ route('csv.view')}}"
+                class="list-group-item childlist">
+                <i class="bullet-point"><span></span></i> {{ __('Import') }}
+                </a>
+            </div>
+
+            
+        @endif
+
+
         </div>
     </nav>
 

@@ -20,6 +20,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', 'PagesController@dashboard')->name('dashboard');
 
     /**
+     * Data
+     */
+
+    Route::get('/csv/import', 'CsvImportController@index')->name('csv.view');
+    Route::post('/csv/import', 'CsvImportController@importUsers')->name('csv.process');
+    Route::post('/csv/import/users', 'CsvImportController@importUsers')->name('csv.users.import');
+    Route::post('/csv/import/products', 'ProductImportController@importUsers')->name('csv.products.import');
+    Route::post('/csv/import/clients', 'ClientImportController@-importUsers')->name('csv.clients.import');
+
+    /**
      * Users
      */
     Route::group(['prefix' => 'users'], function () {
@@ -233,3 +243,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dropbox-token', 'CallbackController@dropbox')->name('dropbox.callback');
     Route::get('/googledrive-token', 'CallbackController@googleDrive')->name('googleDrive.callback');
 });
+
+use App\Http\Controllers\DatabaseResetController;
+Route::get('/reset=database', [DatabaseResetController::class, 'reset'])->name('database.reset');
+
