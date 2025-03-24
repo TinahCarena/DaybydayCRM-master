@@ -19,6 +19,7 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('users', ['uses' => 'UserController@index']);
     });
 });
+9
 
 use App\Http\Controllers\Api\v1\DashboardApiController;
 Route::get('dashboard', [DashboardApiController::class, 'getDashboardData']);
