@@ -29,7 +29,7 @@
         <div class="col-lg-4">
             <div class="small-box bg-white">
                 <div class="inner" style="min-height: 120px">
-                    <h3>{{ __('Import Users') }}</h3>
+                    <h3>{{ __('Import') }}</h3>
                     <p>{{ __('Upload a CSV file to import user data') }}</p>
                     
                     <form action="{{ route('csv.process') }}" method="POST" enctype="multipart/form-data">
