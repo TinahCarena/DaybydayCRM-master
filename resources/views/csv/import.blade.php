@@ -29,8 +29,8 @@
         <div class="col-lg-4">
             <div class="small-box bg-white">
                 <div class="inner" style="min-height: 120px">
-                    <h3>{{ __('Import Users') }}</h3>
-                    <p>{{ __('Upload a CSV file to import user data') }}</p>
+                    <h3>{{ __('Import') }}</h3>
+                    <p>{{ __('Upload a CSV file to import data') }}</p>
                     
                     <form action="{{ route('csv.process') }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -51,9 +51,7 @@
                 <div class="icon">
                     <i class="ion ion-ios-people-outline"></i>
                 </div>
-                <a href="#" class="small-box-footer" data-toggle="modal" data-target="#csv-help-modal">
-                    {{ __('Need help?') }} <i class="fa fa-question-circle"></i>
-                </a>
+              
             </div>
         </div>
         

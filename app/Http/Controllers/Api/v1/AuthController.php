@@ -11,20 +11,23 @@ class AuthController extends Controller
   
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-    
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
         if (Auth::attempt($credentials)) {
-            // L'utilisateur est authentifié, mais il n'y a pas de token créé
+            $user = Auth::user();
+            $token = $user->createToken('API Token')->plainTextToken;
+
             return response()->json([
                 'message' => 'Authenticated successfully',
-                'success' => true
+                'token' => $token
             ], 200);
         }
-    
-        // Retourner une réponse JSON cohérente en cas d'erreur
+
         return response()->json([
-            'error' => 'Authentication failed',
-            'success' => false
+            'message' => 'Authentication failed'
         ], 401);
     }
     
