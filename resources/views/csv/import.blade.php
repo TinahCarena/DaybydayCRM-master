@@ -30,8 +30,9 @@
             <div class="small-box bg-white">
                 <div class="inner" style="min-height: 120px">
                     <h3>{{ __('Import') }}</h3>
+
                     <p>{{ __('Upload a CSV file to import data') }}</p>
-                    
+        
                     <form action="{{ route('csv.process') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
