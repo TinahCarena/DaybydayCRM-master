@@ -27,6 +27,11 @@ Route::get('paymentsPerMonth', [DashboardApiController::class, 'getPaymentsPerMo
 Route::get('paymentsByOffer', [DashboardApiController::class, 'getPaymentsByOffer']);
 Route::get('paymentsByTask', [DashboardApiController::class, 'getPaymentsByTask']);
 Route::get('paymentsByLead', [DashboardApiController::class, 'getPaymentsByLead']);
+Route::get('getAllPayment', [DashboardApiController::class, 'getAllPayment']);
+Route::get('/payment/{id}', [DashboardApiController::class, 'getPaymentById']);
+Route::post('/updatePayment', [DashboardApiController::class, 'updatePayment']);
+Route::post('/deletePayment', [DashboardApiController::class, 'deletePayment']);
+
 
 use App\Http\Controllers\Api\v1\TestController;
 Route::get('test', [TestController::class, 'testApi']);
