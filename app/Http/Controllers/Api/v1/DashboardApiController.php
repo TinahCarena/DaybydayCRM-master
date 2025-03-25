@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
+use App\Services\Invoice\InvoiceCalculator;
+
+
 
 class DashboardApiController extends Controller
 {
@@ -95,19 +98,102 @@ class DashboardApiController extends Controller
     }
     public function getAllPayment()
     {
-        // Récupérer les paiements avec les informations du client, source de paiement, date et montant
+        // Récupérer les paiements avec les informations du client, source de paiement, date, montant, offer_id et idPayment
         $payments = DB::table('payments')
             ->join('invoices', 'payments.invoice_id', '=', 'invoices.id') // Jointure avec la table 'invoices'
             ->join('clients', 'invoices.client_id', '=', 'clients.id') // Jointure avec la table 'clients'
+            ->join('offers', 'invoices.offer_id', '=', 'offers.id') // Jointure avec la table 'offers'
+            ->whereNull('payments.deleted_at') // Condition pour ne récupérer que les paiements non supprimés
             ->select(
-                'clients.company_name', // Ajouter le nom de l'entreprise du client
+                'payments.id as idPayment', // Ajouter l'ID du paiement
+                'clients.company_name', // Nom de l'entreprise du client
                 'payments.payment_source', // Source du paiement
                 'payments.payment_date', // Date du paiement
-                'payments.amount' // Montant du paiement
+                'payments.amount', // Montant du paiement
+                'invoices.offer_id' // ID de l'offre associée à la facture
             )
             ->get();
 
         // Retourner les paiements sous forme de réponse JSON
         return response()->json($payments);
     }
+
+    public function getPaymentById($id)
+    {
+        // Rechercher le paiement par ID
+        $payment = DB::table('payments')
+            ->join('invoices', 'payments.invoice_id', '=', 'invoices.id')
+            ->join('clients', 'invoices.client_id', '=', 'clients.id')
+            ->join('offers', 'invoices.offer_id', '=', 'offers.id')
+            ->select(
+                'payments.id as idPayment',
+                'invoices.id as invoice_id',
+                'clients.company_name', 
+                'payments.payment_source',
+                'payments.payment_date',
+                'payments.amount',
+                'invoices.offer_id'
+            )
+            ->where('payments.id', $id)
+            ->first();  // Utilise 'first' pour récupérer un seul paiement
+
+        // Retourner la réponse JSON
+        return response()->json($payment);
+    }
+    public function updatePayment(Request $request)
+    {
+        $payment = Payment::find($request->idPayment);
+        $invoice = Invoice::find($request->idInvoice);
+
+        if (!$invoice) {
+            return response()->json(['message' => __("Invoice not found.")], 404);
+        }
+
+        // Maintenant, on peut instancier InvoiceCalculator avec un vrai objet Invoice
+        if ($payment) {
+            
+            $invoiceCalculator = new InvoiceCalculator($invoice);
+            $amount_reste_a_paye = $invoiceCalculator->getMontantResteAPaye()->getAmount();
+            
+            if ($request->amount * 100 > $amount_reste_a_paye) {
+                // Renvoi d'une réponse JSON avec un message d'avertissement
+                return response()->json(['message' => __("The payment amount exceeds !")], 400);
+            }
+            else{
+                $payment->amount = $request->amount * 100;
+                $payment->save();
+    
+                // Réponse réussie
+                return response()->json(['message' => 'Payment updated successfully'], 200);
+            }
+           
+        }
+
+        // Si le paiement n'a pas été trouvé
+        return response()->json(['message' => 'Payment not found'], 404);
+    }
+
+    public function deletePayment(Request $request) {
+        // Validation de la présence du paramètre 'idPayment' dans la requête
+        $request->validate([
+            'idPayment' => 'required|exists:payments,id', // Vérifie que l'idPayment existe dans la table payments
+        ]);
+    
+        // Récupérer le paiement à "supprimer" (en fait, on mettra à jour la colonne deleted_at)
+        $payment = Payment::find($request->idPayment);
+    
+        // Vérifier si le paiement existe avant de mettre à jour la colonne deleted_at
+        if ($payment) {
+            // Mettre à jour la colonne deleted_at avec la date actuelle
+            $payment->deleted_at = Carbon::now();
+            $payment->save(); // Sauvegarder les modifications
+    
+            // Retourner une réponse JSON avec succès
+            return response()->json(['message' => 'Payment marked as deleted successfully'], 200);
+        }
+    
+        // Si le paiement n'a pas été trouvé
+        return response()->json(['message' => 'Payment not found'], 404);
+    }
+  
 }
