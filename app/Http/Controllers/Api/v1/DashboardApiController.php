@@ -188,12 +188,9 @@ class DashboardApiController extends Controller
             $payment->deleted_at = Carbon::now();
             $payment->save(); // Sauvegarder les modifications
     
-            // Retourner une réponse JSON avec succès
             return response()->json(['message' => 'Payment marked as deleted successfully'], 200);
         }
     
-        // Si le paiement n'a pas été trouvé
         return response()->json(['message' => 'Payment not found'], 404);
     }
-  
 }
