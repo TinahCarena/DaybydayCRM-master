@@ -129,4 +129,16 @@ class Client extends Model
     {
         return $this->searchableFields;
     }
+
+    public static function getIdClientByUsername($username): ?int
+    {
+        $client = self::whereHas('user', function ($query) use ($username) {
+            $query->where('name', $username)
+                ->whereNull('deleted_at'); // Si vous voulez ignorer les utilisateurs supprimés
+        })
+        ->whereNull('deleted_at') // Ignore les clients supprimés (SoftDeletes)
+        ->first();
+
+        return $client ? $client->id : null;
+    }
 }

@@ -23,8 +23,11 @@ Route::group(['middleware' => ['auth']], function () {
      * Data
      */
 
+    // Route::get('/csv/import', 'CsvImportController@index')->name('csv.view');
+    // Route::post('/csv/import', 'CsvImportController@importUsers')->name('csv.process');
     Route::get('/csv/import', 'CsvImportController@index')->name('csv.view');
-    Route::post('/csv/import', 'CsvImportController@importUsers')->name('csv.process');
+    Route::post('/csv/import', 'CsvImportController@import')->name('csv.process');
+    
     Route::post('/csv/import/users', 'CsvImportController@importUsers')->name('csv.users.import');
     Route::post('/csv/import/products', 'ProductImportController@importUsers')->name('csv.products.import');
     Route::post('/csv/import/clients', 'ClientImportController@-importUsers')->name('csv.clients.import');

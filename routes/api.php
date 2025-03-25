@@ -39,7 +39,6 @@ Route::get('getAllProject', [DetailApiController::class, 'getAllProject']);
 Route::get('getAllTask', [DetailApiController::class, 'getAllTask']);
 Route::get('getAllInvoices', [DetailApiController::class, 'getAllInvoices']);
 
-
 use App\Http\Controllers\DatabaseResetController;
 Route::get('/data/reset-data', [DatabaseResetController::class, 'resetSpecificTables'])->name('data.process');
 
