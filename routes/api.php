@@ -19,7 +19,6 @@ Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
         Route::get('users', ['uses' => 'UserController@index']);
     });
 });
-9
 
 use App\Http\Controllers\Api\v1\DashboardApiController;
 Route::get('dashboard', [DashboardApiController::class, 'getDashboardData']);
@@ -31,7 +30,6 @@ Route::get('getAllPayment', [DashboardApiController::class, 'getAllPayment']);
 Route::get('/payment/{id}', [DashboardApiController::class, 'getPaymentById']);
 Route::post('/updatePayment', [DashboardApiController::class, 'updatePayment']);
 Route::post('/deletePayment', [DashboardApiController::class, 'deletePayment']);
-
 
 use App\Http\Controllers\Api\v1\TestController;
 Route::get('test', [TestController::class, 'testApi']);

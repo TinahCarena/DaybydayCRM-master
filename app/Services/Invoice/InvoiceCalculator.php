@@ -60,6 +60,19 @@ class InvoiceCalculator
     {
         return new Money($this->getTotalPrice()->getAmount() - $this->invoice->payments()->sum('amount'));
     }
+    public function getMontantResteAPaye()
+    {
+        $invoiceId = $this->invoice->id;
+        
+        // Calcul du montant total payé en excluant le paiement en cours (idPayment)
+        $montantPaye = $this->invoice->payments()
+            ->where('invoice_id', $invoiceId)
+            ->whereNotIn('id', [$this->invoice->idPayment]) // Exclure le paiement en cours
+            ->sum('amount');
+
+        return new Money($this->getTotalPrice()->getAmount() - $montantPaye);
+    }
+
 
     public function getInvoice()
     {
