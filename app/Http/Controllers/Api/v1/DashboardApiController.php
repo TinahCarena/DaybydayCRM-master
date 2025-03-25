@@ -144,34 +144,35 @@ class DashboardApiController extends Controller
     {
         $payment = Payment::find($request->idPayment);
         $invoice = Invoice::find($request->idInvoice);
-
+    
         if (!$invoice) {
             return response()->json(['message' => __("Invoice not found.")], 404);
         }
-
-        // Maintenant, on peut instancier InvoiceCalculator avec un vrai objet Invoice
-        if ($payment) {
-            
-            $invoiceCalculator = new InvoiceCalculator($invoice);
-            $amount_reste_a_paye = $invoiceCalculator->getMontantResteAPaye()->getAmount();
-            
-            if ($request->amount * 100 > $amount_reste_a_paye) {
-                // Renvoi d'une réponse JSON avec un message d'avertissement
-                return response()->json(['message' => __("The payment amount exceeds !")], 400);
-            }
-            else{
-                $payment->amount = $request->amount * 100;
-                $payment->save();
     
-                // Réponse réussie
-                return response()->json(['message' => 'Payment updated successfully'], 200);
-            }
-           
+        if (!$payment) {
+            return response()->json(['message' => __("Payment not found.")], 404);
         }
-
-        // Si le paiement n'a pas été trouvé
-        return response()->json(['message' => 'Payment not found'], 404);
+    
+        // Instancier InvoiceCalculator avec l'Invoice
+        $invoiceCalculator = new InvoiceCalculator($invoice);
+        
+        // Montant total restant à payer (avec la remise appliquée)
+        $amount_reste_a_paye = $invoiceCalculator->getMontantResteAPaye($payment->id)->getAmount();
+    
+        // Vérifier si le nouveau montant dépasse ce qui reste à payer
+        $nouveauMontant = $request->amount * 100; // Conversion en cents si nécessaire
+    
+        if ($nouveauMontant > $amount_reste_a_paye) {
+            return response()->json(['message' => __("The payment amount exceeds the amount due.")], 400);
+        }
+    
+        // Mettre à jour le paiement
+        $payment->amount = $nouveauMontant;
+        $payment->save();
+    
+        return response()->json(['message' => 'Payment updated successfully'], 200);
     }
+    
 
     public function deletePayment(Request $request) {
         // Validation de la présence du paramètre 'idPayment' dans la requête
@@ -195,5 +196,5 @@ class DashboardApiController extends Controller
         // Si le paiement n'a pas été trouvé
         return response()->json(['message' => 'Payment not found'], 404);
     }
-  
+
 }
