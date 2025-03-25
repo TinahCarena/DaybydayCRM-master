@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+use App\Http\Controllers\Api\v1\SettingController;
+
+Route::get('/remise', [SettingController::class, 'getRemise']);
+Route::post('/remise', [SettingController::class, 'updateRemise']);
+
 Route::post('login', 'App\Http\Controllers\Api\v1\AuthController@login');
 
 Route::group(['namespace' => 'App\Api\v1\Controllers'], function () {
