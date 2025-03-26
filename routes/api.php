@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 use App\Http\Controllers\Api\v1\SettingController;
 
 Route::get('/remise', [SettingController::class, 'getRemise']);
