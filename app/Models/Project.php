@@ -116,4 +116,15 @@ class Project extends model implements Commentable
     {
         return $this->searchableFields;
     }
+    
+    public static function getProjectIdByTitle(string $title): ?int
+    {
+        try {
+            return self::where('title', $title)
+                ->firstOrFail()
+                ->id;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return null;
+        }
+    }
 }

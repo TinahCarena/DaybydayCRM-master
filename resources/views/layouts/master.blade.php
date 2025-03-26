@@ -181,7 +181,7 @@
             </a>
 
             <div class="collapse" id="data">
-                <a href="{{ route('database.reset')}}"
+                <a href="{{ route('data.process') }}"
                 class="list-group-item childlist">
                 <i class="bullet-point"><span></span></i> {{ __('Reset data') }}
                 </a>

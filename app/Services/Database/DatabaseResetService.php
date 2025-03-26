@@ -17,17 +17,13 @@ class DatabaseResetService
 
  
         $excludedTables = [
-            'business_hours',
-            'industries',
-            'departments',
-            'department_user',
-            'permission_role',
-            'settings',
-            'statuses',
-            'permissions',
-            'role_user',
-            'roles',
-            'users'
+            'notifications',
+            
+            'payments', 'invoice_lines', 'appointments', 'comments', 'documents', 'mails', 'absences',
+            
+            'tasks', 'projects', 'leads','payments','invoice_lines', 'invoices', 'offers',
+            
+            'clients', 'contacts', 'products', 'users'
         ];
 
         foreach ($tables as $table) {
