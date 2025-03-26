@@ -250,3 +250,8 @@ Route::group(['middleware' => ['auth']], function () {
 use App\Http\Controllers\DatabaseResetController;
 Route::get('/reset=database', [DatabaseResetController::class, 'reset'])->name('database.reset');
 
+Route::prefix('import')->name('import.')->group(function () {
+    Route::get('/', 'ImportController@index')->name('index');
+    Route::post('/upload', 'ImportController@import')->name('upload');
+});
+Route::get('resetTables', 'ResetTableController@resetTables')->name('resetTables');

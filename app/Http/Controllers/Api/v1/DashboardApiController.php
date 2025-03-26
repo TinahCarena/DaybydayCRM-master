@@ -96,7 +96,6 @@ class DashboardApiController extends Controller
 
         return response()->json($paymentsByLead);
     }
-    
     public function getAllPayment()
     {
         // Récupérer les paiements avec les informations du client, source de paiement, date, montant, offer_id et idPayment

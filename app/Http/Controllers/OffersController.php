@@ -6,6 +6,7 @@ use App\Models\Offer;
 use Ramsey\Uuid\Uuid;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Enums\OfferStatus;
 use App\Models\InvoiceLine;
 use App\Enums\InvoiceStatus;
@@ -87,6 +88,8 @@ class OffersController extends Controller
         $newLines = collect();
         foreach($lines as $invoiceLine) {
             $invoiceLine->offer_id = null;
+            $remise = Setting::first()->remise;
+            $invoiceLine->price=$invoiceLine->price*(1-$remise/100);
             $newLines->push(InvoiceLine::make($invoiceLine->toArray()));
         }
   
