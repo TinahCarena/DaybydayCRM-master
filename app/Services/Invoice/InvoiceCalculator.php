@@ -77,7 +77,9 @@ class InvoiceCalculator
     
         return new Money($totalPrice - $montantPaye);
     }
-   
+    
+
+
     public function getInvoice()
     {
         return $this->invoice;

@@ -174,6 +174,12 @@
             @endif
 
             @if(Entrust::hasRole('administrator') || Entrust::hasRole('owner'))
+                <a href="{{ route('import.index') }}" class="list-group-item" data-bs-toggle="collapse" data-bs-parent="#MainMenu">
+                    <i class="fa fa-file-csv sidebar-icon"></i>
+                    <span id="menu-txt">{{ __('Import CSV') }}</span>
+                </a>
+            @endif
+         @if(Entrust::hasRole('administrator') || Entrust::hasRole('owner'))
             <a href="#data" class="list-group-item" data-toggle="collapse" data-parent="#MainMenu">
                 <i class="fa fa-upload sidebar-icon"></i>
                 <span id="menu-txt">{{ __('Data') }}</span>
@@ -181,19 +187,13 @@
             </a>
 
             <div class="collapse" id="data">
-                <a href="{{ route('data.process') }}"
+                <a href="{{ route('resetTables')}}"
                 class="list-group-item childlist">
-                <i class="bullet-point"><span></span></i> {{ __('Reset data') }}
-                </a>
-                <a href="{{ route('csv.view')}}"
-                class="list-group-item childlist">
-                <i class="bullet-point"><span></span></i> {{ __('Import') }}
+                <i class="bullet-point"><span></span></i> {{ __('Reset db') }}
                 </a>
             </div>
-
             
         @endif
-
 
         </div>
     </nav>
